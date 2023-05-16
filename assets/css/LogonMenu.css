@@ -1,0 +1,139 @@
+@font-face {
+    font-family: "SF";
+    src: url(/assets/css/Font/SFProText-Regular.ttf);
+}
+
+* {
+    font-family: "SF";
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 190px 9px;
+    background: #1d1d2a;
+}
+
+.screen-1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #272738;
+    flex-direction: column;
+    border-radius: 30px;
+    gap: 3em;
+    padding: 3em;
+}
+
+input {
+    margin: 0 auto;
+    display: flex;
+    padding: 5px;
+    cursor: pointer;
+    justify-content: center;
+    outline: none;
+    border: 1px solid #e0e0e0;
+    background-color: rgb(251 251 251);
+    border-radius: 8px;
+
+}
+
+
+input::-moz-selection {
+    color:red;
+}
+
+
+
+
+
+
+
+.screen-1 .Login .input-login {
+
+}
+
+.screen-1 .password .input-pass {
+    font-size: 10px;
+    color: rebeccapurple;
+
+}
+
+.screen-1 .input-enter {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 3px;
+    padding: 8px 12px;
+    line-height: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    text-overflow: ellipsis;
+
+}
+
+
+.im-right-menu {
+    position: fixed;
+    margin-left: 565px;
+}
+
+.page-block {
+    position: relative;
+    background: gray;
+    border-radius: 12px;
+}
+
+.screen-1.contol-grid-row {
+    row-gap: 10px;
+}
+
+label
+{
+    padding: 0 0 0 8px;
+    font-size: 12.5px;
+    flex-direction: column-reverse;
+    line-height: 1.25;
+    color: #a1b5cc;
+}
+
+.screen-1 .main-logo
+{
+    font-size: 15px;
+    padding: 30px;
+    margin-top: -20px;
+}
+
+.screen-1 .enter-button
+{
+    font-size: 10px;
+
+}
+.enter-button
+{
+
+    border: 1px solid #0091af;
+    background-color: white;
+    width: 130px;
+}
+
+.red-border
+{
+    background-color: red;
+}
+
+.error-div-message{
+    color: red;
+}
+
+.enter-button
+{
+    color: #c2c1c1;
+    background: #272738;
+    padding: 4px 14px;
+    border: 1px solid #a1a1a1;
+}
+
+
+
