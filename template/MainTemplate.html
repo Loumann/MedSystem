@@ -7,30 +7,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/assets/css/MainPageAnalise.css">
+    <link rel="stylesheet" href="/assets/css/container-errors.css">
 </head>
 
 <body>
 <header class="main-title">
     <h1>Поиск по пациенту</h1>
     <input type="text" id="searchInput">
-    <button onclick="exit()" id="buttonExit">Выйти</button>
-
-
-
+    <button onclick="goHomePage()" id="buttonExit">Выйти</button>
 </header>
-
-
-
-
-
 
 <div class="page-block">
     <div class="users">
-        <label for="userSelect">Пациенты</label>
+        <div class="users-header">
+            <label for="userSelect">Пациенты</label>
+            <button id="createUser" onclick="onCreateUserClick()">+</button>
+        </div>
         <select class="select-user" id="userSelect"></select>
     </div>
     <div class="page-block-analise" id="AnaliseBlock"></div>
 </div>
+
+<div class="create-user hidden">
+    <div class="create-user-header">
+        <h3>Добавить пациента</h3>
+        <div id="closeCreateUser" onclick="onCloseCreateUser()"></div>
+    </div>
+    <input id="createUserName" type="text" placeholder="Имя">
+    <input id="createUserSurname" type="text" placeholder="Фамилия">
+    <input id="createUserPatronymic" type="text" placeholder="Отчество">
+    <input id="createUserSnils" type="text" placeholder="Снилс">
+    <button onclick="onCreateUser()">Создать</button>
+</div>
+
+<div id="container-notify"></div>
 
 <script src="/assets/js/BroadcastJson.js"></script>
 </body>

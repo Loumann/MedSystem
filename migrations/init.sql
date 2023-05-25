@@ -1,3 +1,4 @@
+create database medbase
 
 create table "User"
 (
@@ -6,14 +7,6 @@ create table "User"
     "LastName"   varchar,
     "Patronymic" varchar,
     "SNILS"      varchar
-);
-
-create table "UserAnalise"
-(
-    "AnaliseId" integer   not null references "Analise",
-    "UserId"    integer   not null references "User",
-        constraint "UserAnalisePK"
-            primary key ("AnaliseId", "UserId")
 );
 
 create table Analise
@@ -31,6 +24,14 @@ create table Analise
     "SG"   varchar,
     "Leu"  varchar
 );
+create table "UserAnalise"
+(
+    "AnaliseId" integer   not null references "Analise",
+    "UserId"    integer   not null references "User",
+        constraint "UserAnalisePK"
+            primary key ("AnaliseId", "UserId")
+);
+
  create table UserLogin
 (
     Username varchar,

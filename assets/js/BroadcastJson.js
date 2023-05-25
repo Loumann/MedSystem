@@ -22,6 +22,12 @@ class Fetch {
 		}, callback)
 	};
 
+	createUser = (name, surname, patronymic, snils, callback) => {
+		this.POST("/create-user", {
+			name, surname, patronymic, snils,
+		}, callback)
+	};
+
 	searchUsers = (search, callback) => {
 		this.GET(`/users/${search}`, callback);
 	};
@@ -71,14 +77,13 @@ const fetch = new Fetch("http://localhost:8080");
 function onSignIn() {
 	const usernameElement = document.querySelector("#usernameInput");
 	const passwordElement = document.querySelector("#passwordInput");
-	const errorElement = document.querySelector("#errorMessage");
 
 	const username = usernameElement.value.trim();
 	const password = passwordElement.value.trim();
 
 	if (username === '' || password === '' )
 	{
-		errorElement.textContent = 'Необходимо заполнить все поля!';
+		showError("Необходимо заполнить все поля")
 		return;
 	}
 
@@ -199,13 +204,104 @@ const getAnaliseRow = (name, value, valid) => {
 	return row;
 };
 
-function exit()
-{
-	const ex = document.querySelector("buttonExit")
-location.href = "MainTemplate.html"
-
-
+const goHomePage = () => {
+	location.href = "/"
 }
+
+const showError = (message) => {
+	const containerErrors = document.querySelector('#container-notify')
+	const containerElement = document.createElement("div")
+	const headerElement = document.createElement("h3")
+	const messageElement = document.createElement("p")
+
+	containerElement.className = "error-container"
+	headerElement.textContent = "😡 Произошла ошибка"
+	messageElement.textContent = message
+
+
+	containerElement.onclick = () => {
+		containerElement.remove()
+	}
+
+	containerElement.append(
+		headerElement,
+		messageElement,
+	)
+
+	containerErrors.append(containerElement)
+	setTimeout(() => containerElement.remove(), 2000)
+}
+
+const showSuccess = (message) => {
+	const containerErrors = document.querySelector('#container-notify')
+	const containerElement = document.createElement("div")
+	const headerElement = document.createElement("h3")
+	const messageElement = document.createElement("p")
+
+	containerElement.className = "success-container"
+	headerElement.textContent = "😊 Операция успешно выполнена"
+	messageElement.textContent = message
+
+	containerElement.onclick = () => {
+		containerElement.remove()
+	}
+
+	containerElement.append(
+		headerElement,
+		messageElement,
+	)
+
+	containerErrors.append(containerElement)
+	setTimeout(() => containerElement.remove(), 2000)
+}
+
+const onCreateUserClick = () => {
+	openCreateUserModal()
+}
+
+const onCreateUser = () => {
+	const nameElement = document.querySelector('#createUserName')
+	const surnameElement = document.querySelector('#createUserSurname')
+	const patronymicElement = document.querySelector('#createUserPatronymic')
+	const snilsElement = document.querySelector('#createUserSnils')
+
+	if (
+		nameElement.value === "" ||
+		surnameElement.value === "" ||
+		patronymicElement.value === "" ||
+		snilsElement.value === ""
+	) {
+		showError("Не все поля заполнены")
+		return
+	}
+
+	fetch.createUser(
+		nameElement.value,
+		surnameElement.value,
+		patronymicElement.value,
+		snilsElement.value,
+		() => {
+			showSuccess("Пользователь успешно создан")
+			closeCreateUserModal()
+			loadUsers()
+		},
+	)
+}
+
+const onCloseCreateUser = () => {
+	closeCreateUserModal()
+}
+
+const openCreateUserModal  = () => {
+	const modal = document.querySelector(".create-user")
+	modal.classList.remove("hidden")
+}
+
+const closeCreateUserModal  = () => {
+	const modal = document.querySelector(".create-user")
+	modal.classList.add("hidden")
+}
+
 loadUsers();
 initAutoSearchUsers();
 

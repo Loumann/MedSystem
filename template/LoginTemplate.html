@@ -3,37 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/assets/css/LogonMenu.css">
     <title>MedAnalise</title>
+    <link rel="stylesheet" href="/assets/css/LogonMenu.css">
+    <link rel="stylesheet" href="/assets/css/container-errors.css">
 </head>
 
 <body>
 
-<div id="SignInForm">
-    <div class="screen-1 contol-grid-row">
-        <label class="main-logo" >(Название организации?)</label>
-        <div class="login-matgin">
-            <label>Логин</label>
-            <input id="usernameInput" type="text"><br>
-        </div>
-
-        <div class="Password-margin">
-            <label>Пароль</label>
-            <input  id="passwordInput" type="password"><br>
-        </div>
-        <button class="enter-button" onclick="onSignIn()">Войти</button>
-        <div class="error-div-message" id="errorMessage"></div>
-
-    </div>
-
+<div class="auth-block">
+    <h2>Система учета и диагностики общего анализа урины</h2>
+    <input id="usernameInput" type="text" placeholder="Имя пользователь">
+    <input  id="passwordInput" type="password" placeholder="Пароль">
+    <button onclick="onSignIn()">Войти</button>
 </div>
 
+<div id="container-notify"></div>
+
 <script src="/assets/js/BroadcastJson.js"></script>
-
-
-
-
-
 </body>
 
 </html>
