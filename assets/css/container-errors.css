@@ -1,0 +1,37 @@
+#container-notify {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+}
+
+#container-notify > .error-container {
+    background: #ff7171;
+    padding: 8px;
+    margin-top: 10px;
+    min-width: 400px;
+}
+
+#container-notify > div:hover {
+    cursor: pointer;
+}
+
+#container-notify > div > h3 {
+    padding-bottom: 8px;
+    font-size: 1.1em;
+    margin: 0;
+    color: #252525;
+    border-bottom: 1px solid #9f0615;
+}
+
+#container-notify > div > p {
+    padding: 6px 0 0 0;
+    color: #252525;
+    margin: 0;
+}
+
+#container-notify > .success-container {
+    background: #c7ff78;
+    padding: 8px;
+    margin-top: 10px;
+    min-width: 400px;
+}
