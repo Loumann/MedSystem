@@ -12,3 +12,7 @@ func (h *Handler) LoginPage(c *gin.Context) {
 func (h *Handler) IndexPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "MainTemplate.html", nil)
 }
+
+func (h *Handler) IndexPage11(c *gin.Context) {
+	c.HTML(http.StatusOK, "MainTemplate.html", nil)
+}

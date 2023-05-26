@@ -19,7 +19,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
 	db, err := repository.GetDatabaseConnection(config)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -42,8 +41,9 @@ func GetRouter(h *handler.Handler) *gin.Engine {
 
 	router.GET("/", h.LoginPage)
 	router.GET("/index", h.IndexPage)
-
 	router.POST("/create-user", h.CreateUser)
+	router.POST("/delete-user", h.DeleteUser)
+
 	router.POST("/sign-in", h.SignIn)
 	router.GET("/users", h.GetUsers)
 	router.GET("/users/:search", h.GetUsers)

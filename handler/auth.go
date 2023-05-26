@@ -15,6 +15,7 @@ func (h *Handler) SignIn(c *gin.Context) {
 
 	if err := c.BindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+
 		return
 	}
 

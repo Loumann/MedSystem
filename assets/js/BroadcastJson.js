@@ -28,6 +28,12 @@ class Fetch {
 		}, callback)
 	};
 
+	deleteUser = (id, name, surname, patronymic,snils, callback) => {
+		this.POST(`/delete-user/${id}`, {
+			name, surname, patronymic,
+		}, callback)
+	};
+
 	searchUsers = (search, callback) => {
 		this.GET(`/users/${search}`, callback);
 	};
@@ -58,8 +64,8 @@ class Fetch {
 		const xhr = new XMLHttpRequest();
 		xhr.open("POST", uri);
 		xhr.onload = () => {
-			if (xhr.status === 403 ) {
-				errorElement.textContent = 'Неверный пароль/логин';
+			if (xhr.status === 500 ) {
+				showError("Неверный пароль\логин")
 				return;
 			}
 			if (xhr.response) {
@@ -80,6 +86,7 @@ function onSignIn() {
 
 	const username = usernameElement.value.trim();
 	const password = passwordElement.value.trim();
+
 
 	if (username === '' || password === '' )
 	{
@@ -123,6 +130,16 @@ function onChangeUser() {
 	});
 }
 
+function onDeleteUser()
+{
+	const selectUserElement = document.querySelector("#userSelect")
+
+	fetch.deleteUser(selectUserElement.value,)
+
+
+
+}
+
 const clearAnalysesList = () => {
 	const analiseBlock = document.querySelector("#AnaliseBlock");
 	if (!analiseBlock) {
@@ -164,19 +181,17 @@ const getAnaliseBox = (analise) => {
 	const box = document.createElement("div");
 	box.className = "analise-box";
 
-	box.append(
-		getAnaliseRow("Дата и время сдачи", analise.date),
+	box.append(getAnaliseRow("Дата и время сдачи", analise.date),
 		getAnaliseRow("Эритроциты(Bld)", analise.bld),
-		getAnaliseRow("Уробилиноген(UBG)", analise.ubg, (v) => v >= 0 && v <= 6),
-		getAnaliseRow("Билирубин(Bil)", analise.bil, (v) => v >= 1 && v <= 3),
-		getAnaliseRow("Белок(Pro)", analise.pro, (v) => v >= 0 && v <= 0.3),
-		getAnaliseRow("Нитриты(Nit)", analise.nit),
-		getAnaliseRow("Кетоны(KET)", analise.ket),
-		getAnaliseRow("Глюкоза(GLU)", analise.glu),
-		getAnaliseRow("Кислотность(pH)", analise.ph, (v) => v >= 5 && v <= 7),
-		getAnaliseRow("Плотность(SG)", analise.sg, (v) => v >= 1.015 && v <= 1.04),
-		getAnaliseRow("Лейкоциты(LEU)", analise.leu),
-	);
+		getAnaliseRow("Уробилиноген(UBG)", analise.ubg, (v) => v >= 0 && v <= 6 || v === undefined),
+		getAnaliseRow("Билирубин(Bil)", analise.bil, (v) => v >= 1 && v <= 3 || v === undefined),
+		getAnaliseRow("Белок(Pro)", analise.pro, (v) => v >= 0 && v <= 0.3 || v === undefined),
+		getAnaliseRow("Нитриты(Nit)", analise.nit, (v) => v === "NULL" || v === "NEGATIVE"),
+		getAnaliseRow("Кетоны(KET)", analise.ket, (v) => v === "NEG" || v === "NEGATIVE"),
+		getAnaliseRow("Глюкоза(GLU)", analise.glu, (v) => v === "NEG" || v === "NEGATIVE"),
+		getAnaliseRow("Кислотность(pH)", analise.ph, (v) => v >= 5 && v <= 7 || v === undefined),
+		getAnaliseRow("Плотность(SG)", analise.sg, (v) => v >= 1.015 && v <= 1.04 || v === undefined),
+		getAnaliseRow("Лейкоциты(LEU)", analise.leu),);
 
 	return box;
 };
@@ -194,7 +209,13 @@ const getAnaliseRow = (name, value, valid) => {
 
 	if (valid) {
 		const isValid = valid(value);
-		isValid ? row.classList.add("valid") : row.classList.add("invalid");
+		if (isValid === undefined) {
+			row.classList.add("undefined");
+		} else if (isValid) {
+			row.classList.add("valid");
+		} else {
+			row.classList.add("invalid");
+		}
 	} else {
 		row.classList.add("valid");
 	}
@@ -282,6 +303,7 @@ const onCreateUser = () => {
 		snilsElement.value,
 		() => {
 			showSuccess("Пользователь успешно создан")
+			"" === nameElement.textContent;
 			closeCreateUserModal()
 			loadUsers()
 		},
@@ -301,6 +323,9 @@ const closeCreateUserModal  = () => {
 	const modal = document.querySelector(".create-user")
 	modal.classList.add("hidden")
 }
+
+
+
 
 loadUsers();
 initAutoSearchUsers();

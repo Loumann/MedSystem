@@ -22,11 +22,13 @@
         <div class="users-header">
             <label for="userSelect">Пациенты</label>
             <button id="createUser" onclick="onCreateUserClick()">+</button>
+            <button id="deleteUser" onclick="onDeleteUser()">-</button>
         </div>
         <select class="select-user" id="userSelect"></select>
     </div>
     <div class="page-block-analise" id="AnaliseBlock"></div>
 </div>
+
 
 <div class="create-user hidden">
     <div class="create-user-header">
@@ -39,6 +41,9 @@
     <input id="createUserSnils" type="text" placeholder="Снилс">
     <button onclick="onCreateUser()">Создать</button>
 </div>
+
+
+
 
 <div id="container-notify"></div>
 

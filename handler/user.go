@@ -6,6 +6,7 @@ import (
 )
 
 type CreateUserInput struct {
+	id         string `json:"id" binding:"required"`
 	Name       string `json:"name" binding:"required"`
 	Surname    string `json:"surname" binding:"required"`
 	Patronymic string `json:"patronymic" binding:"required"`
@@ -27,6 +28,24 @@ func (h *Handler) CreateUser(c *gin.Context) {
 		input.Snils,
 	); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.AbortWithStatus(http.StatusOK)
+}
+
+func (h *Handler) DeleteUser(c *gin.Context) {
+	var input CreateUserInput
+	if err := c.BindJSON(&input); err != nil {
+		return
+	}
+	if err := h.r.DeleteUser(
+		input.id,
+		input.Name,
+		input.Surname,
+		input.Patronymic,
+		input.Snils,
+	); err != nil {
 		return
 	}
 

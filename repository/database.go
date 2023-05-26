@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"log"
 	"somename/configs"
 	"somename/models"
 )
@@ -39,6 +40,17 @@ func (r *Repository) CreateUser(name, surname, patronymic, snils string) error {
 	return err
 }
 
+func (r *Repository) DeleteUser(id, surname, patronymic, snils, s string) error {
+	_, err := r.db.Exec(`DELETE FROM "User" ("ID", "LastName", "Patronymic", "SNILS")
+            VALUES ($1, $2, $3, $4)`,
+		id,
+		surname,
+		patronymic,
+		snils)
+	log.Printf(err.Error())
+	return err
+}
+
 func (r *Repository) UserIsExist(username string, password string) error {
 	var count int8
 	if err := r.db.Get(
@@ -50,8 +62,10 @@ func (r *Repository) UserIsExist(username string, password string) error {
 	}
 
 	if count > 0 {
+
 		return nil
 	}
+
 	return errors.New("не правильный пароль.логин")
 }
 
