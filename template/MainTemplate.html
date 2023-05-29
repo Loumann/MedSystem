@@ -14,7 +14,8 @@
 <header class="main-title">
     <h1>Поиск по пациенту</h1>
     <input type="text" id="searchInput">
-    <button onclick="goHomePage()" id="buttonExit">Выйти</button>
+    <button onclick="goHomePage()" id="buttonExit">Выйти<i class="fas fa-sign-out-alt"></i></button>
+    <button onclick="appAnalisys()" id="appAnalisys">Ждать анализ</button>
 </header>
 
 <div class="page-block">
@@ -24,7 +25,9 @@
             <button id="createUser" onclick="onCreateUserClick()">+</button>
             <button id="deleteUser" onclick="onDeleteUser()">-</button>
         </div>
-        <select class="select-user" id="userSelect"></select>
+        <select class="select-user" id="userSelect">
+
+        </select>
     </div>
     <div class="page-block-analise" id="AnaliseBlock"></div>
 </div>

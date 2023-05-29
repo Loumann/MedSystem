@@ -9,6 +9,7 @@ create table "User"
     "SNILS"      varchar
 );
 
+
 create table Analise
 (
     "ID"   integer primary key,
@@ -32,26 +33,10 @@ create table "UserAnalise"
             primary key ("AnaliseId", "UserId")
 );
 
+
+
  create table UserLogin
 (
     Username varchar,
     Password varchar
 );
-
-const getAnaliseBox = (analise) => { const box = document.createElement("div"); box.className = "analise-box";
-
-box.append(
-
-getAnaliseRow("Билирубин(Bil)", analise.bil, (v) => v >=7 && v <=9 || v === undefined), ); return box; };
-
-const getAnaliseRow = (name, value, valid) => { const row = document.createElement("div"); const nameElement = document.createElement("div"); const valueElement = document.createElement("div");
-
-nameElement.className = "analise-name"; nameElement.textContent = ${name}:;
-
-valueElement.className = "analise-value"; valueElement.textContent = value;
-
-if (valid) { const isValid = valid(value); if (isValid === undefined) { row.classList.add("undefined"); } else if (isValid) { row.classList.add("valid"); } else { row.classList.add("invalid"); } } else { row.classList.add("valid"); }
-
-row.append(nameElement, valueElement);
-
-return row; };

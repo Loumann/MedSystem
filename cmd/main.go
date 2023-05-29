@@ -1,11 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"io"
 	"log"
+	"net/http"
 	"somename/configs"
 	"somename/handler"
 	"somename/models"
@@ -42,63 +45,59 @@ func GetRouter(h *handler.Handler) *gin.Engine {
 	router.GET("/", h.LoginPage)
 	router.GET("/index", h.IndexPage)
 	router.POST("/create-user", h.CreateUser)
-	router.POST("/delete-user", h.DeleteUser)
+	router.DELETE("/delete-user/:id", h.DeleteUser)
 
 	router.POST("/sign-in", h.SignIn)
 	router.GET("/users", h.GetUsers)
 	router.GET("/users/:search", h.GetUsers)
-	router.GET("/analyses/:id", h.GetAnalyse)
+	router.GET("/analysis/:id", h.GetAnalyse)
 
 	//хранилище для куки
-	router.GET("/wait-analyse", waitAnalyse)
-	router.GET("/ws", websocketHandler)
+	router.POST("/wait-analyse/:id")
+	router.POST("/analysis/:id", writeAnalysis)
 
 	return router
 }
 
-func waitAnalyse(c *gin.Context) {
-	// Обработка нажатия кнопки "Wait analyse"
-}
-
 // передача по порту
-func websocketHandler(c *gin.Context) {
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		log.Println(err)
+func writeAnalysis(c *gin.Context) {
+	idstr := c.Param("id")
+	fmt.Println(idstr)
+
+	// принять ID пользователя
+
+	response, e := http.Get("https://localhost:7118/api/urs")
+	if e != nil {
+		fmt.Println(e)
 		return
 	}
-	defer conn.Close()
 
-	for {
-		// Читаем сообщение от клиента
-		_, message, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
-			break
-		}
-
-		// декомпиляция json
-		var analysis models.Analysis
-		err = json.Unmarshal(message, &analysis)
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-
-		// Записываем данные в базу данных
-		//err = writeDataToDB(analysis)
-		//if err != nil {
-		//	log.Println(err)
-		//	continue
-		//}
-
-		deviceMessage := fmt.Sprintf("Анализ пользователя %s был успешно сохранен на сервер!")
-
-		// oтправляем сообщение клиенту
-		err = conn.WriteMessage(websocket.TextMessage, []byte(deviceMessage))
-		if err != nil {
-			log.Println(err)
-			break
-		}
+	bytes, e := io.ReadAll(response.Body)
+	if e != nil {
+		fmt.Println(e)
 	}
+	analysis := &models.Analysis{}
+	if err := json.Unmarshal(bytes, analysis); err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := sql.Open("postgres", "host=10.14.206.28 user=postgres password=*sJ#44dm dbname=medbase sslmode=disable")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stmt, err := db.Prepare(`INSERT INTO "Analise" ("Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "PH", "SG", "Leu") 
+                             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning "ID"`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	row := stmt.QueryRow(analysis.Date, analysis.Bld, analysis.Ubg, analysis.Bil, analysis.Pro, analysis.Nit, analysis.Ket, analysis.Glu, analysis.PH, analysis.SG, analysis.Leu)
+	err = row.Scan(&analysis.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//row := db.Exec(`INSERT INTO "UserAnalise"`)
+
+	c.Status(http.StatusOK)
 }

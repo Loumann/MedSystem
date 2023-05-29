@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type CreateUserInput struct {
-	id         string `json:"id" binding:"required"`
+	id         int    `json:"id" binding:"required"`
 	Name       string `json:"name" binding:"required"`
 	Surname    string `json:"surname" binding:"required"`
 	Patronymic string `json:"patronymic" binding:"required"`
@@ -35,21 +37,20 @@ func (h *Handler) CreateUser(c *gin.Context) {
 }
 
 func (h *Handler) DeleteUser(c *gin.Context) {
-	var input CreateUserInput
-	if err := c.BindJSON(&input); err != nil {
+	idStr := c.Param("id")
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	if err := h.r.DeleteUser(
-		input.id,
-		input.Name,
-		input.Surname,
-		input.Patronymic,
-		input.Snils,
-	); err != nil {
+	if err := h.r.DeleteUser(id); err != nil {
+		fmt.Println(err)
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.AbortWithStatus(http.StatusOK)
+	c.Status(http.StatusOK)
 }
 
 func (h *Handler) GetUsers(c *gin.Context) {

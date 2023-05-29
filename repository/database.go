@@ -40,14 +40,11 @@ func (r *Repository) CreateUser(name, surname, patronymic, snils string) error {
 	return err
 }
 
-func (r *Repository) DeleteUser(id, surname, patronymic, snils, s string) error {
-	_, err := r.db.Exec(`DELETE FROM "User" ("ID", "LastName", "Patronymic", "SNILS")
-            VALUES ($1, $2, $3, $4)`,
-		id,
-		surname,
-		patronymic,
-		snils)
-	log.Printf(err.Error())
+func (r *Repository) DeleteUser(id int) error {
+	_, err := r.db.Exec(`DELETE FROM "User" WHERE "ID"=$1`, id)
+	if err != nil {
+		log.Println(err)
+	}
 	return err
 }
 

@@ -1,4 +1,4 @@
-const errorElement = document.querySelector("#errorMessage");
+const errorElement = document.querySelector("#container-notify");
 
 const initAutoSearchUsers = () => {
 	const searchElement = document.querySelector("#searchInput");
@@ -28,18 +28,21 @@ class Fetch {
 		}, callback)
 	};
 
-	deleteUser = (id, name, surname, patronymic,snils, callback) => {
-		this.POST(`/delete-user/${id}`, {
-			name, surname, patronymic,
-		}, callback)
+	deleteUser = (id, callback) => {
+		this.DELETE(`/delete-user/${id}`,  callback)
 	};
+
+	appAnalisys = (id, callback) =>
+	{
+		this.POST(`/analysis/${id}`, callback)
+	}
 
 	searchUsers = (search, callback) => {
 		this.GET(`/users/${search}`, callback);
 	};
 
 	getAnalysis = (user, callback) => {
-		this.GET(`/analyses/${user}`, callback);
+		this.POST(`/analysis/${user}`, callback);
 	};
 
 	GET = (uri, callback) => {
@@ -70,12 +73,26 @@ class Fetch {
 			}
 			if (xhr.response) {
 				errorElement.textContent = '';
-				callback(JSON.parse(xhr.response));
+				callback && callback(JSON.parse(xhr.response));
 				return;
 			}
-			callback();
+			callback && callback();
 		};
 		xhr.send(JSON.stringify(params));
+	};
+
+
+	DELETE = (uri, callback) => {
+		const xhr = new XMLHttpRequest();
+		xhr.open("DELETE", uri);
+		xhr.onload = () => {
+			if (xhr.status !== 200) {
+				// TODO ай-яй-яй
+			}
+			callback();
+
+		};
+		xhr.send();
 	};
 }
 const fetch = new Fetch("http://localhost:8080");
@@ -133,11 +150,13 @@ function onChangeUser() {
 function onDeleteUser()
 {
 	const selectUserElement = document.querySelector("#userSelect")
+	fetch.deleteUser(selectUserElement.value, () => {showSuccess("Пользователь удален", loadUsers())})
+}
 
-	fetch.deleteUser(selectUserElement.value,)
-
-
-
+function appAnalisys()
+{
+	const selectUserElement = document.querySelector("#userSelect")
+	fetch.appAnalisys(selectUserElement.value)
 }
 
 const clearAnalysesList = () => {
@@ -324,7 +343,12 @@ const closeCreateUserModal  = () => {
 	modal.classList.add("hidden")
 }
 
+const selectUser = document.getElementById('userSelect');
+selectUser.classList.add('hidden');
 
+selectUser.addEventListener('click', () => {
+	selectUser.classList.toggle('visible');
+});
 
 
 loadUsers();
