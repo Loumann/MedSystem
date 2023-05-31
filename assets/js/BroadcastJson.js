@@ -1,3 +1,5 @@
+
+
 const errorElement = document.querySelector("#container-notify");
 
 const initAutoSearchUsers = () => {
@@ -42,7 +44,7 @@ class Fetch {
 	};
 
 	getAnalysis = (user, callback) => {
-		this.POST(`/analysis/${user}`, callback);
+		this.GET(`/analyses/${user}`, callback);
 	};
 
 	GET = (uri, callback) => {
@@ -207,7 +209,7 @@ const getAnaliseBox = (analise) => {
 		getAnaliseRow("Белок(Pro)", analise.pro, (v) => v >= 0 && v <= 0.3 || v === undefined),
 		getAnaliseRow("Нитриты(Nit)", analise.nit, (v) => v === "NULL" || v === "NEGATIVE"),
 		getAnaliseRow("Кетоны(KET)", analise.ket, (v) => v === "NEG" || v === "NEGATIVE"),
-		getAnaliseRow("Глюкоза(GLU)", analise.glu, (v) => v === "NEG" || v === "NEGATIVE"),
+		getAnaliseRow("Глюкоза(GLU)", analise.glu, (v) => v === "NEG" || v === "NORM	"),
 		getAnaliseRow("Кислотность(pH)", analise.ph, (v) => v >= 5 && v <= 7 || v === undefined),
 		getAnaliseRow("Плотность(SG)", analise.sg, (v) => v >= 1.015 && v <= 1.04 || v === undefined),
 		getAnaliseRow("Лейкоциты(LEU)", analise.leu),);
@@ -353,6 +355,5 @@ selectUser.addEventListener('click', () => {
 
 loadUsers();
 initAutoSearchUsers();
-
 
 

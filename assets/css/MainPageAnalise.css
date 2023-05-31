@@ -182,10 +182,18 @@ option {
 .deleteUser> button {
     margin-top: 20px;
     padding: 2px 10px;
-    transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
     color: #a1a1a1;
     border: 1px solid #a1a1a1;
 }
+
+.deleteUser > button:hover {
+    cursor: pointer;
+    color: #b02233;
+    border: 1px solid #b0223e;
+}
+
+
 
 #deleteUser:hover {
 
@@ -205,8 +213,6 @@ option {
     background: #62b022;
     color: #fff;
     border-color: #62b022;
-    cursor: pointer;
     transform: translateY(2px);
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
-
