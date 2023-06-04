@@ -8,6 +8,7 @@ import (
 	"log"
 	"somename/configs"
 	"somename/models"
+	"time"
 )
 
 type Repository struct {
@@ -87,10 +88,47 @@ func (r *Repository) GetAnalisys(userID int) ([]models.Analysis, error) {
 	var analisys []models.Analysis
 
 	if err := r.db.Select(&analisys,
-		`select "Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "pH", "SG", "Leu"
+		`select "Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "ph", "SG", "Leu"
 		from "Analise" as a inner join "UserAnalise" UA on a."ID" = UA."AnaliseId" where "UserId"=$1 order by "Date" desc`, userID); err != nil {
 		return nil, err
 	}
 
 	return analisys, nil
+}
+
+func (r *Repository) GetUserByID(userID int) (*models.User, error) {
+	var user models.User
+
+	if err := r.db.Get(&user, `SELECT * FROM "User" WHERE id=$1`, userID); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *Repository) LinkUserWithAnalyse(userID int, analyse *models.Analysis) error {
+	var analyseID int
+
+	if err := r.db.Get(&analyseID, `INSERT INTO "Analise" ("Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "PH", "SG", "Leu")
+                   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning "ID"`,
+		time.Now(),
+		analyse.Bld,
+		analyse.Ubg,
+		analyse.Bil,
+		analyse.Pro,
+		analyse.Nit,
+		analyse.Ket,
+		analyse.Glu,
+		analyse.PH,
+		analyse.SG,
+		analyse.Leu); err != nil {
+		return err
+	}
+
+	_, err := r.db.Exec(`INSERT INTO "UserAnalise" (analiseId, UserId) VALUES ($1, $2)`, analyseID, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

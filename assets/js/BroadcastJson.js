@@ -11,6 +11,7 @@ const initAutoSearchUsers = () => {
 	searchElement.addEventListener('input', loadUsers);
 };
 
+
 class Fetch {
 	baseURL = "";
 
@@ -34,9 +35,9 @@ class Fetch {
 		this.DELETE(`/delete-user/${id}`,  callback)
 	};
 
-	appAnalisys = (id, callback) =>
+	waitAnalisys = (id, callback) =>
 	{
-		this.POST(`/analysis/${id}`, callback)
+		this.POST(`/wait-analyse/${id}`, callback)
 	}
 
 	searchUsers = (search, callback) => {
@@ -70,7 +71,7 @@ class Fetch {
 		xhr.open("POST", uri);
 		xhr.onload = () => {
 			if (xhr.status === 500 ) {
-				showError("Неверный пароль\логин")
+				showError("Неверные данные")
 				return;
 			}
 			if (xhr.response) {
@@ -158,7 +159,7 @@ function onDeleteUser()
 function appAnalisys()
 {
 	const selectUserElement = document.querySelector("#userSelect")
-	fetch.appAnalisys(selectUserElement.value)
+	fetch.waitAnalisys(selectUserElement.value)
 }
 
 const clearAnalysesList = () => {

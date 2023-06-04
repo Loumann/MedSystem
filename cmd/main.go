@@ -25,7 +25,7 @@ func main() {
 	h := handler.GetHandler(r)
 
 	router := GetRouter(h)
-	if err = router.Run(":8080"); err != nil {
+	if err = router.Run(":8081"); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -46,8 +46,9 @@ func GetRouter(h *handler.Handler) *gin.Engine {
 	router.GET("/users/:search", h.GetUsers)
 	router.GET("/analyses/:id", h.GetAnalyse)
 
-	//хранилище для куки
-	//router.POST("/wait-analyse/:id")
+	router.POST("/wait-analyse/:id", h.WaitAnalyse)
+	router.GET("/waiting-users", h.GetWaitingUsers)
+	router.POST("/fulfill-waiting-user", h.FulfillWaitingUser)
 	//router.POST("/analysis/:id", writeAnalysis)
 
 	return router

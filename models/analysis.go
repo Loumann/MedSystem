@@ -10,7 +10,7 @@ type Analysis struct {
 	Nit  string `json:"nit" db:"Nit"`
 	Ket  string `json:"ket" db:"Ket"`
 	Glu  string `json:"glu" db:"Glu"`
-	PH   string `json:"ph" db:"pH"`
+	PH   string `json:"ph" db:"ph"`
 	SG   string `json:"sh" db:"SG"`
 	Leu  string `json:"leu" db:"Leu"`
 }
