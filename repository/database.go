@@ -92,7 +92,7 @@ func (r *Repository) GetAnalisys(userID int) ([]models.Analysis, error) {
 
 	if err := r.db.Select(&analisys,
 		`select "Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "ph", "SG", "Leu"
-		from "Analise" as a inner join "UserAnalise" UA on a."ID" = UA."AnaliseId" where "UserId"=$1 order by "Date" desc`, userID); err != nil {
+		from "Analise" as a inner join "UserAnalise" UA on a."ID" = UA."analiseid" where "userid"=$1 order by "Date" desc`, userID); err != nil {
 		return nil, err
 	}
 
@@ -116,7 +116,7 @@ func (r *Repository) GetUserByID(ID int) (*models.User, error) {
 func (r *Repository) LinkUserWithAnalyse(userID int, analyse *models.Analysis) error {
 	var analyseID int
 
-	if err := r.db.Get(&analyseID, `INSERT INTO "Analise" ("Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "PH", "SG", "Leu")
+	if err := r.db.Get(&analyseID, `INSERT INTO "Analise" ("Date", "Bld", "Ubg", "Bil", "Pro", "Nit", "Ket", "Glu", "ph", "SG", "Leu")
                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning "ID"`,
 		time.Now(),
 		analyse.Bld,
@@ -132,8 +132,9 @@ func (r *Repository) LinkUserWithAnalyse(userID int, analyse *models.Analysis) e
 		return err
 	}
 
-	_, err := r.db.Exec(`INSERT INTO "UserAnalise" (analiseId, UserId) VALUES ($1, $2)`, analyseID, userID)
+	_, err := r.db.Exec(`INSERT INTO "UserAnalise" (AnaliseId, UserId) VALUES ($1, $2)`, analyseID, userID)
 	if err != nil {
+		fmt.Println(err.Error())
 		return err
 	}
 

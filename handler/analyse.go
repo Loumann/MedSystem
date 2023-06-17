@@ -48,6 +48,7 @@ func (h *Handler) FulfillWaitingUser(c *gin.Context) {
 	var input models.FulfillWaitingUserInput
 
 	if err := c.BindJSON(&input); err != nil {
+		fmt.Println(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		log.Println(err.Error())
 		log.Println("Error fulfillwaitingUser")
@@ -56,11 +57,14 @@ func (h *Handler) FulfillWaitingUser(c *gin.Context) {
 	}
 
 	if err := h.r.LinkUserWithAnalyse(input.User, &input.Analyse); err != nil {
+		fmt.Println(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
+
 	}
 
 	if err := h.r.RemoveWaitingUser(input.User); err != nil {
+		fmt.Println(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}

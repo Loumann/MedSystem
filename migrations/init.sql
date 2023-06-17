@@ -12,7 +12,7 @@ create table "User"
 
 create table Analise
 (
-    "ID"   integer primary key,
+    "ID"   serial primary key,
     "Date" varchar,
     "Bld"  varchar,
     "Ubg"  varchar,
@@ -27,8 +27,8 @@ create table Analise
 );
 create table "UserAnalise"
 (
-    "AnaliseId" integer   not null references "Analise",
-    "UserId"    integer   not null references "User",
+    "analiseid" integer   not null references "Analise",
+    "userid"    integer   not null references "User",
         constraint "UserAnalisePK"
             primary key ("AnaliseId", "UserId")
 );
