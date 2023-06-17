@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -8,39 +9,25 @@ import (
 	"strconv"
 )
 
-func (h *Handler) GetAnalyse(c *gin.Context) {
-	// проверка на авторизацию
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
-	analisys, err := h.r.GetAnalisys(id)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
-		log.Println(err)
-		return
-	}
-
-	c.AbortWithStatusJSON(http.StatusOK, analisys)
-}
-
 func (h *Handler) WaitAnalyse(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+
 		return
 	}
 
 	user, err := h.r.GetUserByID(id)
 	if err != nil {
+		fmt.Println("2")
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	if err = h.r.AppendWaitUser(user); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+		fmt.Println("3")
+
 		return
 	}
 
@@ -62,6 +49,9 @@ func (h *Handler) FulfillWaitingUser(c *gin.Context) {
 
 	if err := c.BindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		log.Println(err.Error())
+		log.Println("Error fulfillwaitingUser")
+
 		return
 	}
 

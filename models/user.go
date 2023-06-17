@@ -1,6 +1,8 @@
 package models
 
-import "sync"
+import (
+	"sync"
+)
 
 type User struct {
 	ID         int    `json:"id" db:"ID"`
@@ -16,6 +18,14 @@ type WaitingUsers struct {
 }
 
 type FulfillWaitingUserInput struct {
-	User    int      `json:"user" binding:"required"`
-	Analyse Analysis `json:"analyse" binding:"required"`
+	User    int      `json:"user" `
+	Analyse Analysis `json:"analyse"`
+}
+
+type UserJson struct {
+	ID         int    `json:"id"`
+	FirstName  string `json:"first_name"`
+	LastName   string `json:"last_name"`
+	Patronymic string `json:"patronymic"`
+	Snils      string `json:"snils"`
 }

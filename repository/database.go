@@ -1,12 +1,15 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"somename/configs"
+)
+
+import (
+	"errors"
 	_ "github.com/lib/pq"
 	"log"
-	"somename/configs"
 	"somename/models"
 	"time"
 )
@@ -96,14 +99,18 @@ func (r *Repository) GetAnalisys(userID int) ([]models.Analysis, error) {
 	return analisys, nil
 }
 
-func (r *Repository) GetUserByID(userID int) (*models.User, error) {
+func (r *Repository) GetUserByID(ID int) (*models.User, error) {
+
 	var user models.User
 
-	if err := r.db.Get(&user, `SELECT * FROM "User" WHERE id=$1`, userID); err != nil {
+	log.Println("Норма")
+	if err := r.db.Get(&user, `SELECT * FROM "User" WHERE "ID"=$1`, ID); err != nil {
 		return nil, err
+		log.Println("Норм")
 	}
 
 	return &user, nil
+
 }
 
 func (r *Repository) LinkUserWithAnalyse(userID int, analyse *models.Analysis) error {

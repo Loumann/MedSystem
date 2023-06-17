@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"somename/models"
 )
 
@@ -33,6 +34,6 @@ func (r *Repository) RemoveWaitingUser(userID int) error {
 	waitingUsers.Items = users
 
 	waitingUsers.Unlock()
-
+	fmt.Println(users)
 	return nil
 }

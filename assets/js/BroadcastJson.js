@@ -98,7 +98,7 @@ class Fetch {
 		xhr.send();
 	};
 }
-const fetch = new Fetch("http://localhost:8080");
+const fetch = new Fetch("http://localhost:8081");
 
 function onSignIn() {
 	const usernameElement = document.querySelector("#usernameInput");
